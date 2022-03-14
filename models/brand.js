@@ -1,11 +1,11 @@
 const { Schema, model } = require('mongoose');
 
-const CategorySchema = new Schema(
+const BrandSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 100,
     },
     imageUrl: {
@@ -15,8 +15,8 @@ const CategorySchema = new Schema(
   { timestamps: true }
 );
 
-CategorySchema.virtual('url').get(function () {
-  return '/category/' + this._id;
+BrandSchema.virtual('url').get(function () {
+  return '/brand/' + this._id;
 });
 
-module.exports = model('Category', CategorySchema);
+module.exports = model('Brand', BrandSchema);
