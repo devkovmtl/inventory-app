@@ -2,6 +2,10 @@
 
 from The Odin's Project [curriculum](https://www.theodinproject.com/paths/full-stack-javascript/courses/nodejs/lessons/inventory-application)
 
+[demo](https://gentle-fjord-76048.herokuapp.com/)
+
+Need time to load for the first time.
+
 # Build with:
 
 - [ExpressJS](https://create-react-app.dev/docs/getting-started)
