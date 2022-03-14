@@ -10,3 +10,4 @@ Need time to load for the first time.
 
 - [ExpressJS](https://create-react-app.dev/docs/getting-started)
 - [ExpressJs Generator](https://expressjs.com/fr/starter/generator.html)
+- MongoDB with [Mongoose](https://mongoosejs.com/)
