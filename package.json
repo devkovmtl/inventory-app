@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_ENV=developement DEBUG=inventory-app:* nodemon ./bin/www"
   },
   "dependencies": {
+    "async": "^3.2.3",
     "cookie-parser": "~1.4.4",
     "cross-env": "^7.0.3",
     "debug": "~2.6.9",
