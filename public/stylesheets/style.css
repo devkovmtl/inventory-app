@@ -1,8 +1,48 @@
-/* 
-  font-family: 'Fredoka', sans-serif;
-  font-family: 'Open Sans', sans-serif;
-*/
-
 body {
   font-family: 'Open Sans', sans-serif;
+  width: 100vw;
+  height: 100vh;
+}
+
+.wrapper {
+  display: block;
+}
+
+.sidenav {
+  width: 280px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -299px;
+  z-index: 999;
+  background: red;
+  color: #fff;
+  transition: all 0.3s;
+  box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.5);
+  text-align: left;
+}
+
+.sidenav.active {
+  left: 0;
+}
+
+.content {
+  width: 100%;
+  transition: all 0.3s;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(51, 51, 51, 0.7);
+  z-index: 99;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.overlay.active {
+  display: block;
+  opacity: 1;
 }
