@@ -12,7 +12,7 @@ exports.productList = async (req, res, next) => {
 
 // Get product detail for a specific product
 exports.productDetail = async (req, res, next) => {
-  const productId = Schema.Types(req.params.id);
+  const productId = Schema.Types.ObjectId(req.params.id);
   res.send('NOT IMPLEMENTED: Product Details Page ' + productId);
 };
 
@@ -37,11 +37,11 @@ exports.productDeletePost = async (req, res, next) => {
 };
 
 //  Display product update form GET
-exports.productDeleteGet = async (req, res, next) => {
+exports.productUpdateGet = async (req, res, next) => {
   res.send('NOT IMPLEMENTED: Product Update GET Page');
 };
 
 // Display product update form POST
-exports.productDeletePost = async (req, res, next) => {
+exports.productUpdatePost = async (req, res, next) => {
   res.send('NOT IMPLEMENTED: Product Update POST Page');
 };

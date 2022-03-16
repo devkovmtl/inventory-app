@@ -33,11 +33,11 @@ exports.brandDeletePost = async (req, res, next) => {
 };
 
 //  Display brand update form GET
-exports.brandDeleteGet = async (req, res, next) => {
+exports.brandUpdateGet = async (req, res, next) => {
   res.send('NOT IMPLEMENTED: Brand Update GET Page');
 };
 
 // Display brand update form POST
-exports.brandDeletePost = async (req, res, next) => {
+exports.brandUpdatePost = async (req, res, next) => {
   res.send('NOT IMPLEMENTED: Brand Update POST Page');
 };
