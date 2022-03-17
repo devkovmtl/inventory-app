@@ -7,9 +7,11 @@
       <!-- Overlay -->
       <div class="overlay"></div>
       <div class="content">
-        <button class="open-sidenav">Show</button>
-        <h1><%= title %></h1>
-        <p>Welcome to <%= title %></p>
+        <%- include('./templates/header') -%>
+        <main>
+          <h1><%= title %></h1>
+          <p>Welcome to <%= title %></p>
+        </main>
       </div>
     </div>
   </body>
