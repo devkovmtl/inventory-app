@@ -37,7 +37,7 @@ const ProductSchema = new Schema(
 );
 
 ProductSchema.virtual('url').get(function () {
-  return '/product/' + this._id;
+  return '/myShop/product/' + this._id;
 });
 
 module.exports = model('Product', ProductSchema);
