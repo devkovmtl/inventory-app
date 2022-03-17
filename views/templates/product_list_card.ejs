@@ -1,0 +1,24 @@
+<div class="col-sm">
+  <div class="card product-list-card h-100 shadow-sm">
+    <div class="p-5 h-50">
+      <a href="/myShop/product/<%= product.id %>">
+        <img
+          src="/<%= product.imageUrl %>"
+          class="card-img-top"
+          alt="<%= product.name %>"
+        />
+      </a>
+    </div>
+
+    <div class="card-body mt-auto">
+      <p class="card-text text-warning fw-bold fs-3">$ <%= product.price %></p>
+      <h5 class="card-title fw-bolder text-uppercase fs-4">
+        <%= product.name %>
+      </h5>
+      <p class="text-muted"><%= product.brand.name %></p>
+      <div class="d-flex justify-content-center align-content-center">
+        <button href="#" class="btn btn-warning">Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
