@@ -1,4 +1,5 @@
 const async = require('async');
+const { body, validationResult } = require('express-validator');
 const Brand = require('../models/brand');
 const Product = require('../models/product');
 
@@ -42,14 +43,50 @@ exports.brandDetail = (req, res, next) => {
 };
 
 // Get form to create a brand
-exports.brandCreateGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Create Get');
+exports.brandCreateGet = (req, res, next) => {
+  res.render('admin/brand_form', { title: 'Create Brand', errors: null });
 };
 
 // Handle the post to create brand
-exports.brandCreatePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: brand create Post');
-};
+exports.brandCreatePost = [
+  body('name', 'Brand name is required').trim().isLength({ min: 1 }).escape(),
+  (req, res, next) => {
+    // extract validation errors from a request
+    const errors = validationResult(req);
+
+    // create brand object with escaped and trimmed data
+    const brand = new Brand({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values error mesages
+      res.render('admin/brand_form', {
+        title: 'Create Brand',
+        brand,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data form is valid
+      Brand.findOne({ name: req.body.name }).exec((err, found_brand) => {
+        if (err) {
+          return next(err);
+        }
+        if (found_brand) {
+          // Brand already exist redirect to brand detail page
+          res.rendirect(found_brand.url);
+        } else {
+          brand.save(function (err) {
+            if (err) {
+              return next(err);
+            }
+            // brand saved. redirect to brand detail
+            res.redirect(brand.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 // Get form to delete a brand
 exports.brandDeleteGet = async (req, res, next) => {
