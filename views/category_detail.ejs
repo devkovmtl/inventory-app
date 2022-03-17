@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./templates/head'); -%>
+  <body>
+    <div class="wrapper">
+      <%- include('./templates/sidenav'); -%>
+      <!-- Overlay -->
+      <div class="overlay"></div>
+      <div class="content">
+        <%- include('./templates/header') -%>
+        <main>
+          <!-- Containter -->
+          <div class="album">
+            <div class="container pb-5">
+              <% if (category) { %>
+
+              <div>
+                <h2 class="text-dark fw-bold py-2"><%= category.name %></h2>
+              </div>
+
+              <% if(category_products.length > 0) {%>
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <% for (let product of category_products) {%> <%-
+                include('templates/product_list_card', {product: product}); -%>
+                <% } %> <% } else { %>
+                <p>No Products found. Sorry, Try again.</p>
+              </div>
+              <% } %> <% } else { %>
+              <p>No Category found. Sorry, Try again.</p>
+              <% } %>
+            </div>
+          </div>
+        </main>
+        <%- include('./templates/footer') -%>
+      </div>
+    </div>
+  </body>
+</html>

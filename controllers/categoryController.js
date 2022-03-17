@@ -1,5 +1,6 @@
-const { Schema } = require('mongoose');
+const async = require('async');
 const Category = require('../models/category');
+const Product = require('../models/product');
 
 // Get all the categories
 exports.categoryList = async (req, res, next) => {
@@ -15,8 +16,32 @@ exports.categoryList = async (req, res, next) => {
 };
 
 // Get category details
-exports.categoryDetail = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: category details ' + req.params.id);
+exports.categoryDetail = (req, res, next) => {
+  async.parallel(
+    {
+      category: function (callback) {
+        Category.findById(req.params.id).exec(callback);
+      },
+      category_products: function (callback) {
+        Product.find({ category: { $all: [req.params.id] } }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.category === null) {
+        const err = new Error('Category not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('category_detail', {
+        title: 'Category Detail',
+        category: results.category,
+        category_products: results.category_products,
+      });
+    }
+  );
 };
 
 exports.categoryCreateGet = async (req, res, next) => {
