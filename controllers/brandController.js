@@ -3,13 +3,17 @@ const Brand = require('../models/brand');
 
 // Get all the brands
 exports.brandList = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Get list');
+  try {
+    const list_brands = await Brand.find({}).sort('name').exec();
+    res.render('brand_list', { title: 'Brands', brand_list: list_brands });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Get brand detail for a specific brand
 exports.brandDetail = async (req, res, next) => {
-  const brandId = Schema.Types(req.params.id);
-  res.send('NOT IMPLEMENTED: Brand Get details' + brandId);
+  res.send('NOT IMPLEMENTED: Brand Get details' + req.params.id);
 };
 
 // Get form to create a brand

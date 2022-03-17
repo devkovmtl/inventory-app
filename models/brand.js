@@ -16,7 +16,7 @@ const BrandSchema = new Schema(
 );
 
 BrandSchema.virtual('url').get(function () {
-  return '/brand/' + this._id;
+  return '/myShop/brand/' + this._id;
 });
 
 module.exports = model('Brand', BrandSchema);
