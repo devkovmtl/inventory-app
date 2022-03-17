@@ -1,4 +1,5 @@
 const async = require('async');
+const { default: mongoose } = require('mongoose');
 const Category = require('../models/category');
 const Product = require('../models/product');
 
@@ -19,6 +20,9 @@ exports.categoryList = async (req, res, next) => {
 exports.categoryDetail = (req, res, next) => {
   async.parallel(
     {
+      list_categories: function (callback) {
+        Category.find({}).exec(callback);
+      },
       category: function (callback) {
         Category.findById(req.params.id).exec(callback);
       },
@@ -39,6 +43,7 @@ exports.categoryDetail = (req, res, next) => {
         title: 'Category Detail',
         category: results.category,
         category_products: results.category_products,
+        category_list: results.list_categories,
       });
     }
   );

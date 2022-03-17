@@ -2,7 +2,7 @@ const { Schema } = require('mongoose');
 const Product = require('../models/product');
 
 exports.index = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Site Home Page');
+  res.redirect('/');
 };
 
 // Get all the products

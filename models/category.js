@@ -11,6 +11,12 @@ const CategorySchema = new Schema(
     imageUrl: {
       type: String,
     },
+    parentCategory: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 100,
+    },
   },
   { timestamps: true }
 );

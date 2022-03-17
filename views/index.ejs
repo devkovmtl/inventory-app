@@ -137,61 +137,17 @@
               </div>
             </div>
             <!-- End Features section -->
-
+            <%if (category_list.length > 0) { %>
             <h3 class="pb-2 text-center">DEPARTEMENTS</h3>
             <!-- Departement Section -->
             <div
               class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5"
             >
-              <div class="col">
-                <div
-                  class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
-                  style="
-                    background-image: url('/images/categories/vegetables.jpg');
-                  "
-                >
-                  <div class="card-overlay">
-                    <div
-                      class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1"
-                    >
-                      <h4 class="pt-5 mt-5 mb-4 lh-1 fw-bold">VEGETABLES</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <div
-                  class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
-                  style="
-                    background-image: url('/images/categories/fresh_fruits.jpg');
-                  "
-                >
-                  <div class="card-overlay">
-                    <div
-                      class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1"
-                    >
-                      <h4 class="pt-5 mt-5 mb-4 lh-1 fw-bold">FRESH FRUITS</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <div
-                  class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
-                  style="background-image: url('/images/categories/cheese.jpg')"
-                >
-                  <div class="card-overlay">
-                    <div
-                      class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1"
-                    >
-                      <h4 class="pt-5 mt-5 mb-4 lh-1 fw-bold">CHEESE</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <% for(let category of category_list) { %>
+              <%-include('templates/category_list_card', {category: category});
+              -%> <% } %>
             </div>
+            <% } %>
             <!-- End of Departements section -->
           </div>
           <!-- Main Container -->
