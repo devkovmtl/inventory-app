@@ -1,5 +1,6 @@
-const { Schema } = require('mongoose');
+const async = require('async');
 const Brand = require('../models/brand');
+const Product = require('../models/product');
 
 // Get all the brands
 exports.brandList = async (req, res, next) => {
@@ -12,8 +13,32 @@ exports.brandList = async (req, res, next) => {
 };
 
 // Get brand detail for a specific brand
-exports.brandDetail = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Get details' + req.params.id);
+exports.brandDetail = (req, res, next) => {
+  async.parallel(
+    {
+      brand: function (callback) {
+        Brand.findById(req.params.id).exec(callback);
+      },
+      brand_products: function (callback) {
+        Product.find({ brand: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.brand === null) {
+        const err = new Error('Brand not Found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('brand_detail', {
+        title: 'Brand Detail',
+        brand: results.brand,
+        brand_products: results.brand_products,
+      });
+    }
+  );
 };
 
 // Get form to create a brand
