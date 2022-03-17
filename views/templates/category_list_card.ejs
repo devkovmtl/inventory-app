@@ -1,0 +1,17 @@
+<div class="col">
+  <a href="<%= category.url %>" class="text-decoration-none">
+    <div
+      class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
+      style="
+        background-image: url('/<%= category.imageUrl %>');
+        cursor: pointer;
+      "
+    >
+      <div class="card-overlay">
+        <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+          <h4 class="pt-5 mt-5 mb-4 lh-1 fw-bold"><%= category.name %></h4>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

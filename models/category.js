@@ -16,7 +16,7 @@ const CategorySchema = new Schema(
 );
 
 CategorySchema.virtual('url').get(function () {
-  return '/category/' + this._id;
+  return '/myShop/category/' + this._id;
 });
 
 module.exports = model('Category', CategorySchema);

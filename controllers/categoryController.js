@@ -7,7 +7,7 @@ exports.categoryList = async (req, res, next) => {
     const list_categories = await Category.find({});
     res.render('category_list', {
       title: 'Categories',
-      categories_list: list_categories,
+      category_list: list_categories,
     });
   } catch (error) {
     return next(error);
@@ -16,8 +16,7 @@ exports.categoryList = async (req, res, next) => {
 
 // Get category details
 exports.categoryDetail = async (req, res, next) => {
-  const categoryId = Schema.Types(req.params.id);
-  res.send('NOT IMPLEMENTED: category details ' + categoryId);
+  res.send('NOT IMPLEMENTED: category details ' + req.params.id);
 };
 
 exports.categoryCreateGet = async (req, res, next) => {

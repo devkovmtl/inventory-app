@@ -71,7 +71,7 @@ router.post('/category/:id/delete', categoryController.categoryDeletePost);
 router.get('/category/:id/update', categoryController.categoryUpdateGet);
 router.post('/category/:id/update', categoryController.categoryUpdatePost);
 
-router.get('/category/:id', categoryController.categoryList);
+router.get('/category/:id', categoryController.categoryDetail);
 router.get('/categories', categoryController.categoryList);
 
 module.exports = router;
