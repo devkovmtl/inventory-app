@@ -22,7 +22,24 @@ exports.productList = async (req, res, next) => {
 
 // Get product detail for a specific product
 exports.productDetail = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Details Page ' + req.params.id);
+  try {
+    const product = await Product.findById(req.params.id)
+      .populate('brand')
+      .populate('category')
+      .exec();
+    if (product === null) {
+      const err = new Error('Product not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('product_detail', {
+      title: 'Product detail',
+      product: product,
+      errors: null,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Get form to create a product
