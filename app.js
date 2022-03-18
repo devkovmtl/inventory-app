@@ -5,9 +5,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport');
 
-const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST, MONGO_DATABASE } =
-  process.env;
+const {
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_HOST,
+  MONGO_DATABASE,
+  SESSION_SECRET,
+} = process.env;
 
 const mongoDB = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DATABASE}?retryWrites=true&w=majority`;
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -19,8 +27,22 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const myShopRouter = require('./routes/shop');
+const authRouter = require('./routes/auth');
 
 const app = express();
+
+// SESSION and PASSPORT
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+// initialize passport
+app.use(passport.initialize());
+// use express session
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/myShop', myShopRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
