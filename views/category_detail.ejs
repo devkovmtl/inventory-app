@@ -16,9 +16,18 @@
 
               <div class="d-flex align-content-center justify-content-between">
                 <h2 class="text-dark fw-bold py-2"><%= category.name %></h2>
-                <a href="<%= category.url + '/delete'%>"
-                  >Delete this category</a
-                >
+                <div>
+                  <p>
+                    <a href="<%= category.url + '/delete'%>" class="text-danger"
+                      >Delete this category</a
+                    >
+                  </p>
+                  <p>
+                    <a href="<%= category.url + '/update'%>" class="text-info"
+                      >Update this category</a
+                    >
+                  </p>
+                </div>
               </div>
 
               <% if(category_products.length > 0) {%>

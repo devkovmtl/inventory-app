@@ -165,9 +165,50 @@ exports.categoryDeletePost = (req, res, next) => {
 };
 
 exports.categoryUpdateGet = async (req, res, next) => {
-  res.send('Not Implemented: Category Update Get');
+  const category = await Category.findById(req.params.id);
+  if (!category) {
+    res.redirect('/myShop/category/create');
+    return;
+  }
+  res.render('admin/category_form', {
+    title: 'Update Brand',
+    category,
+    errors: null,
+  });
 };
 
-exports.categoryUpdatePost = async (req, res, next) => {
-  res.send('Not implemented: Category Update Post');
-};
+exports.categoryUpdatePost = [
+  body('name', 'Category name is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    // extract validation errors
+    const errors = validationResult(req);
+
+    // pass _id to not create new category
+    const category = new Category({ name: req.body.name, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      res.render('admin/category_form', {
+        title: 'Create Category',
+        category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data form is valid
+      Category.findByIdAndUpdate(
+        req.params.id,
+        category,
+        {},
+        (err, updateCategory) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect(updateCategory.url);
+        }
+      );
+    }
+  },
+];

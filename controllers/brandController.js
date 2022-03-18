@@ -195,7 +195,6 @@ exports.brandUpdatePost = [
       return;
     } else {
       Brand.findByIdAndUpdate(req.params.id, brand, {}, (err, updateBrand) => {
-        console.log('UPDATE BRAND ', updateBrand);
         if (err) {
           return next(err);
         }
