@@ -159,10 +159,48 @@ exports.brandDeletePost = async (req, res, next) => {
 
 //  Display brand update form GET
 exports.brandUpdateGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Update GET Page');
+  try {
+    const brand = await Brand.findById(req.params.id);
+    if (!brand) {
+      res.redirect('/myShop/brand/create');
+      return;
+    }
+    res.render('admin/brand_form', {
+      title: 'Update Brand',
+      brand: brand,
+      errors: null,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Display brand update form POST
-exports.brandUpdatePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Update POST Page');
-};
+exports.brandUpdatePost = [
+  body('name', 'Brand name is required').trim().isLength({ min: 1 }).escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const brand = new Brand({
+      name: req.body.name,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values error mesages
+      res.render('admin/brand_form', {
+        title: 'Update Brand',
+        brand,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      Brand.findByIdAndUpdate(req.params.id, brand, {}, (err, updateBrand) => {
+        console.log('UPDATE BRAND ', updateBrand);
+        if (err) {
+          return next(err);
+        }
+        res.redirect(updateBrand.url);
+      });
+    }
+  },
+];
