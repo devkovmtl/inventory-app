@@ -130,12 +130,29 @@ exports.productCreatePost = [
 
 // Get form to delete a product
 exports.productDeleteGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Delete Get Page');
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product === null) {
+      res.redirect('/myShop/products');
+    }
+    res.render('admin/product_delete', {
+      title: 'Delete Product',
+      product: product,
+      errors: null,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Handle the post to delete product
 exports.productDeletePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Delete Post Page');
+  try {
+    await Product.findByIdAndRemove(req.body.productid);
+    res.redirect('/myShop/products');
+  } catch (error) {
+    next(error);
+  }
 };
 
 //  Display product update form GET
