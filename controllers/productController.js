@@ -156,11 +156,99 @@ exports.productDeletePost = async (req, res, next) => {
 };
 
 //  Display product update form GET
-exports.productUpdateGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Update GET Page');
+exports.productUpdateGet = (req, res, next) => {
+  async.parallel(
+    {
+      product: function (callback) {
+        Product.findById(req.params.id)
+          .populate('brand')
+          .populate('category')
+          .exec(callback);
+      },
+      brands: function (callback) {
+        Brand.find(callback);
+      },
+      categories: function (callback) {
+        Category.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.product == null) {
+        const err = new Error('Product not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('admin/product_form', {
+        title: 'Update Product',
+        brands: results.brands,
+        categories: results.categories,
+        product: results.product,
+        errors: null,
+      });
+    }
+  );
 };
 
 // Display product update form POST
-exports.productUpdatePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Update POST Page');
-};
+exports.productUpdatePost = [
+  body('name', 'Product name is required').trim().isLength({ min: 1 }).escape(),
+  body('description', 'Product description is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('category', 'Product category is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('price', 'Product price is required').trim().toFloat().escape(),
+  body('numberInStock', 'Product stocke is required').trim().toFloat().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    // create product
+    const product = new Product({
+      ...req.body,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // we have errors we need to the brand and category
+      async.parallel(
+        {
+          brands: function (callback) {
+            Brand.find(callback);
+          },
+          categories: function (callback) {
+            Category.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          res.render('admin/product_form', {
+            title: 'Update Product',
+            brands: results.brands,
+            categories: results.categories,
+            product,
+            errors: errors.array(),
+          });
+        }
+      );
+    } else {
+      Product.findByIdAndUpdate(
+        req.params.id,
+        product,
+        {},
+        (err, updateProduct) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect(updateProduct.url);
+        }
+      );
+    }
+  },
+];

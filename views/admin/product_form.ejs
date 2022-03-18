@@ -53,10 +53,7 @@
                     class="form-control"
                   >
                     <% for(let category of categories) { %>
-                    <option
-                      value="<%= category.id %>"
-                      selected="<%=product != undefined && category.id.toString() == product.category.id.toString() ? 'selected': false %>"
-                    >
+                    <option value="<%= category.id %>">
                       <%= category.name%>
                     </option>
                     <% } %>
@@ -69,12 +66,7 @@
                 <div class="input-group">
                   <select name="brand" id="brand" requried class="form-control">
                     <% for(let brand of brands) { %>
-                    <option
-                      value="<%= brand.id %>"
-                      selected="<%=product != undefined && brand.id.toString() == product.brand.id.toString() ? 'selected': false %>"
-                    >
-                      <%= brand.name%>
-                    </option>
+                    <option value="<%= brand.id %>"><%= brand.name%></option>
                     <% } %>
                   </select>
                 </div>
@@ -110,7 +102,7 @@
                     name="numberInStock"
                     placeholder="Product Stock Number"
                     required
-                    value="<%= product == undefined ? '': product.stock%>"
+                    value="<%= product == undefined ? '': product.numberInStock%>"
                   />
                   <div class="invalid-feedback">Product stock is required</div>
                 </div>
