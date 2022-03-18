@@ -1,3 +1,4 @@
+const async = require('async');
 const { body, validationResult } = require('express-validator');
 const Product = require('../models/product');
 const Brand = require('../models/brand');
