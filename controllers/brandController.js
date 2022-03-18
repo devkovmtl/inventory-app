@@ -94,12 +94,67 @@ exports.brandCreatePost = [
 
 // Get form to delete a brand
 exports.brandDeleteGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Brand Delete Get Page');
+  async.parallel(
+    {
+      brand: function (callback) {
+        Brand.findById(req.params.id).exec(callback);
+      },
+      brand_products: function (callback) {
+        Product.find({ brand: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.brand === null) {
+        res.redirect('/myShop/brands');
+      }
+      res.render('admin/brand_delete', {
+        title: 'Delete Brand',
+        brand: results.brand,
+        brand_products: results.brand_products,
+        errors: null,
+      });
+    }
+  );
 };
 
 // Handle the post to delete brand
+// params will be submitted by the hidden input in our form
 exports.brandDeletePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: brand Delete Post Page');
+  async.parallel(
+    {
+      brand: function (callback) {
+        Brand.findById(req.body.brandid).exec(callback);
+      },
+      brand_products: function (callback) {
+        Product.find({ brand: req.body.brandid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // check if we have products to tell client to first delete the products
+      if (results.brand_products.length > 0) {
+        // Brand has product
+        res.render('admin/brand_delete', {
+          title: 'Delete Brand',
+          brand: results.brand,
+          brand_products: results.brand_products,
+        });
+        return;
+      } else {
+        Brand.findByIdAndRemove(req.body.brandid, (err) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/myShop/brands');
+        });
+      }
+    }
+  );
 };
 
 //  Display brand update form GET
