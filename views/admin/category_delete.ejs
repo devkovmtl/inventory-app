@@ -5,30 +5,30 @@
     <%- include('./admin_header'); -%>
     <main>
       <div class="container px-2 py-2">
-        <h1 class="mb-3"><%= title %> : <%= brand.name %></h1>
-        <% if (brand_products.length > 0) { %>
+        <h1 class="mb-3"><%= title %> : <%= category.name %></h1>
+        <% if (category_products.length > 0) { %>
         <p class="text-dark">
           Please Delete the following products before attempting to delete
-          brand.
+          category.
         </p>
         <div>
           <h4>Products</h4>
           <ul>
-            <% for (let product of brand_products) { %>
+            <% for (let product of category_products) { %>
             <li><a href="<%= product.url%>"><%=product.name%></a></li>
             <% } %>
           </ul>
         </div>
         <% } else { %>
-        <p>Do you really want to delete this Brand?</p>
+        <p>Do you really want to delete this Category?</p>
         <form method="POST">
           <div class="form-group">
             <input
               type="hidden"
               class="form-countrol"
-              id="brandid"
-              name="brandid"
-              value="<%=brand.id%>"
+              id="categoryid"
+              name="categoryid"
+              value="<%=category.id%>"
               required
             />
             <button class="btn btn-danger" type="submit">Delete</button>

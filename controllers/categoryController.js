@@ -101,18 +101,73 @@ exports.categoryCreatePost = [
   },
 ];
 
+exports.categoryDeleteGet = (req, res, next) => {
+  async.parallel(
+    {
+      category: function (callback) {
+        Category.findById(req.params.id).exec(callback);
+      },
+      category_products: function (callback) {
+        Product.find({ category: { $all: [req.params.id] } }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.category === null) {
+        res.redirect('/myShop/categories');
+      }
+      res.render('admin/category_delete', {
+        title: 'Delete Category',
+        category: results.category,
+        category_products: results.category_products,
+        errors: null,
+      });
+    }
+  );
+};
+
+exports.categoryDeletePost = (req, res, next) => {
+  async.parallel(
+    {
+      category: function (callback) {
+        Category.findById(req.body.categoryid).exec(callback);
+      },
+      category_products: function (callback) {
+        Product.find({ category: { $all: [req.body.categoryid] } }).exec(
+          callback
+        );
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // check if we have product in category
+      if (results.category_products.lenght > 0) {
+        res.render('admin/category_delete', {
+          title: 'Delete Category',
+          category: results.category,
+          category_products: results.category_products,
+        });
+        return;
+      } else {
+        Category.findByIdAndRemove(req.body.categoryid, (err) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/myShop/categories');
+        });
+      }
+    }
+  );
+};
+
 exports.categoryUpdateGet = async (req, res, next) => {
   res.send('Not Implemented: Category Update Get');
 };
 
 exports.categoryUpdatePost = async (req, res, next) => {
   res.send('Not implemented: Category Update Post');
-};
-
-exports.categoryDeleteGet = async (req, res, next) => {
-  res.send('Not Implemented: Category get Delete form');
-};
-
-exports.categoryDeletePost = async (req, res, next) => {
-  res.send('Not implemented: Category get Delete form');
 };
