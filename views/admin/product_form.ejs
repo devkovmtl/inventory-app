@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../templates/head'); -%>
+  <body>
+    <%- include('./admin_header'); -%>
+    <main>
+      <div class="container px-2 py-2">
+        <div class="row">
+          <div class="col-12 col-md-6 mx-auto">
+            <form method="POST" class="mb-3">
+              <h4 class="mb-3"><%= title %></h4>
+              <div class="col-12 mb-2">
+                <label for="name" class="form-label">Name</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Product Name"
+                    required
+                    value="<%= product == undefined ? '': product.name%>"
+                  />
+                  <div class="invalid-feedback">Product name is required</div>
+                </div>
+              </div>
+
+              <div class="col-12 mb-2">
+                <label for="description" class="form-label">Description</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="description"
+                    name="description"
+                    placeholder="Product Description"
+                    required
+                    value="<%= product == undefined ? '': product.description %>"
+                  />
+                  <div class="invalid-feedback">
+                    Product description is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 mb-2">
+                <label for="category" class="form-label">Category</label>
+                <div class="input-group">
+                  <select
+                    name="category"
+                    id="category"
+                    requried
+                    class="form-control"
+                  >
+                    <% for(let category of categories) { %>
+                    <option
+                      value="<%= category.id %>"
+                      selected="<%=product != undefined && category.id.toString() == product.category.id.toString() ? 'selected': false %>"
+                    >
+                      <%= category.name%>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12 mb-2">
+                <label for="brand" class="form-label">Brand</label>
+                <div class="input-group">
+                  <select name="brand" id="brand" requried class="form-control">
+                    <% for(let brand of brands) { %>
+                    <option
+                      value="<%= brand.id %>"
+                      selected="<%=product != undefined && brand.id.toString() == product.brand.id.toString() ? 'selected': false %>"
+                    >
+                      <%= brand.name%>
+                    </option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12 mb-2">
+                <label for="price" class="form-label">Price</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    min="0"
+                    id="price"
+                    name="price"
+                    placeholder="Product Price"
+                    required
+                    value="<%= product == undefined ? '': product.price%>"
+                  />
+                  <div class="invalid-feedback">Product price is required</div>
+                </div>
+              </div>
+
+              <div class="col-12 mb-2">
+                <label for="numberInStock" class="form-label"
+                  >Stock Number</label
+                >
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    min="0"
+                    id="numberInStock"
+                    name="numberInStock"
+                    placeholder="Product Stock Number"
+                    required
+                    value="<%= product == undefined ? '': product.stock%>"
+                  />
+                  <div class="invalid-feedback">Product stock is required</div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <% if(errors) {%>
+            <ul>
+              <% for(let error of errors) { %>
+              <p class="text-danger" role="alert"><%= error.msg %></p>
+              <% } %>
+            </ul>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
