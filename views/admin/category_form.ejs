@@ -17,13 +17,14 @@
                     class="form-control"
                     id="name"
                     name="name"
-                    placeholder="Brand Name"
+                    placeholder="Category Name"
                     required
-                    value="<%= brand == undefined ? '' : brand.name%>"
+                    value="<%= category == undefined ? '': category.name%>"
                   />
                   <div class="invalid-feedback">Category name is required</div>
                 </div>
               </div>
+
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <% if(errors) {%>

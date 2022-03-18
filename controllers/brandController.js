@@ -44,7 +44,11 @@ exports.brandDetail = (req, res, next) => {
 
 // Get form to create a brand
 exports.brandCreateGet = (req, res, next) => {
-  res.render('admin/brand_form', { title: 'Create Brand', errors: null });
+  res.render('admin/brand_form', {
+    title: 'Create Brand',
+    brand: null,
+    errors: null,
+  });
 };
 
 // Handle the post to create brand
@@ -73,7 +77,7 @@ exports.brandCreatePost = [
         }
         if (found_brand) {
           // Brand already exist redirect to brand detail page
-          res.rendirect(found_brand.url);
+          res.redirect(found_brand.url);
         } else {
           brand.save(function (err) {
             if (err) {

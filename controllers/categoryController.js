@@ -1,5 +1,5 @@
 const async = require('async');
-const { default: mongoose } = require('mongoose');
+const { body, validationResult } = require('express-validator');
 const Category = require('../models/category');
 const Product = require('../models/product');
 
@@ -51,24 +51,55 @@ exports.categoryDetail = (req, res, next) => {
 
 exports.categoryCreateGet = async (req, res, next) => {
   try {
-    res.render('category_form', {
+    res.render('admin/category_form', {
       title: 'Create Category',
-      errors: [],
       category: null,
+      errors: null,
     });
   } catch (error) {
     return next(error);
   }
 };
 
-exports.categoryCreatePost = async (req, res, next) => {
-  try {
-    console.log(req.body);
-    res.redirect('/category');
-  } catch (error) {
-    return next(error);
-  }
-};
+exports.categoryCreatePost = [
+  body('name', 'Category name is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    // extract validation errors
+    const errors = validationResult(req);
+
+    // create category object
+    const category = new Category({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      res.render('admin/category_form', {
+        title: 'Create Category',
+        category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data form is valid
+      Category.findOne({ name: req.body.name }).exec((err, found_category) => {
+        if (err) {
+          return next(err);
+        }
+        if (found_category) {
+          res.redirect(found_category.url);
+        } else {
+          category.save(function (err) {
+            if (err) {
+              return next(err);
+            }
+            res.redirect(category.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 exports.categoryUpdateGet = async (req, res, next) => {
   res.send('Not Implemented: Category Update Get');

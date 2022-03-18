@@ -5,7 +5,7 @@ const CategorySchema = new Schema(
     name: {
       type: String,
       required: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 100,
     },
     imageUrl: {
@@ -13,8 +13,7 @@ const CategorySchema = new Schema(
     },
     parentCategory: {
       type: String,
-      required: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 100,
     },
   },
