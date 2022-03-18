@@ -7,7 +7,7 @@
       <div class="container px-2 py-2">
         <div class="row">
           <div class="col-12 col-md-6 mx-auto">
-            <form method="POST" class="mb-3">
+            <form method="POST" enctype="multipart/form-data" class="mb-3">
               <h4 class="mb-3"><%= title %></h4>
               <div class="col-12 mb-2">
                 <label for="name" class="form-label">Name</label>
@@ -24,7 +24,15 @@
                   <div class="invalid-feedback">Product name is required</div>
                 </div>
               </div>
-
+              <div class="col-12 mb-2">
+                <label for="imageUrl" class="form-label">Choose a file</label>
+                <input
+                  class="form-control"
+                  type="file"
+                  id="imageUrl"
+                  name="imageUrl"
+                />
+              </div>
               <div class="col-12 mb-2">
                 <label for="description" class="form-label">Description</label>
                 <div class="input-group">

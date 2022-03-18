@@ -1,8 +1,41 @@
 const async = require('async');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
 const Product = require('../models/product');
 const Brand = require('../models/brand');
 const Category = require('../models/category');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/uploads');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  },
+});
+
+// check if format is correct
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg' ||
+    file.mimetype === 'image/png'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter,
+});
 
 exports.index = async (req, res, next) => {
   res.redirect('/');
@@ -73,6 +106,7 @@ exports.productCreateGet = (req, res, next) => {
 
 // Handle the post to create product
 exports.productCreatePost = [
+  upload.single('imageUrl'),
   body('name', 'Product name is required').trim().isLength({ min: 1 }).escape(),
   body('description', 'Product description is required')
     .trim()
@@ -118,6 +152,7 @@ exports.productCreatePost = [
         }
       );
     } else {
+      product.imageUrl = `uploads/${req.file.filename}`;
       product.save((err) => {
         if (err) {
           return next(err);
@@ -194,6 +229,7 @@ exports.productUpdateGet = (req, res, next) => {
 
 // Display product update form POST
 exports.productUpdatePost = [
+  upload.single('imageUrl'),
   body('name', 'Product name is required').trim().isLength({ min: 1 }).escape(),
   body('description', 'Product description is required')
     .trim()
@@ -238,6 +274,7 @@ exports.productUpdatePost = [
         }
       );
     } else {
+      product.imageUrl = `uploads/${req.file.filename}`;
       Product.findByIdAndUpdate(
         req.params.id,
         product,
