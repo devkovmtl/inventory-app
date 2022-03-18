@@ -1,5 +1,7 @@
-const { Schema } = require('mongoose');
+const { body, validationResult } = require('express-validator');
 const Product = require('../models/product');
+const Brand = require('../models/brand');
+const Category = require('../models/category');
 
 exports.index = async (req, res, next) => {
   res.redirect('/');
@@ -43,14 +45,87 @@ exports.productDetail = async (req, res, next) => {
 };
 
 // Get form to create a product
-exports.productCreateGet = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product Create Get');
+exports.productCreateGet = (req, res, next) => {
+  async.parallel(
+    {
+      brands: function (callback) {
+        Brand.find(callback);
+      },
+      categories: function (callback) {
+        Category.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('admin/product_form', {
+        title: 'Create Product',
+        brands: results.brands,
+        categories: results.categories,
+        product: null,
+        errors: null,
+      });
+    }
+  );
 };
 
 // Handle the post to create product
-exports.productCreatePost = async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Product create Post');
-};
+exports.productCreatePost = [
+  body('name', 'Product name is required').trim().isLength({ min: 1 }).escape(),
+  body('description', 'Product description is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('category', 'Product category is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('price', 'Product price is required').trim().toFloat().escape(),
+  body('numberInStock', 'Product stocke is required').trim().toFloat().escape(),
+  (req, res, next) => {
+    // extract validation errors
+    const errors = validationResult(req);
+
+    // create product
+    const product = new Product({
+      ...req.body,
+    });
+
+    if (!errors.isEmpty()) {
+      // we have errors we need to the brand and category
+      async.parallel(
+        {
+          brands: function (callback) {
+            Brand.find(callback);
+          },
+          categories: function (callback) {
+            Category.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          res.render('admin/product_form', {
+            title: 'Create Product',
+            brands: results.brands,
+            categories: results.categories,
+            product,
+            errors: errors.array(),
+          });
+        }
+      );
+    } else {
+      product.save((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(product.url);
+      });
+    }
+  },
+];
 
 // Get form to delete a product
 exports.productDeleteGet = async (req, res, next) => {
