@@ -44,6 +44,12 @@ app.use(passport.initialize());
 // use express session
 app.use(passport.session());
 
+// access to user
+app.use(function (req, res, next) {
+  res.locals.user = req.user;
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
