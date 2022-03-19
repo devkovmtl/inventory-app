@@ -7,6 +7,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+const compression = require('compression');
+const helmet = require('helmet');
 require('./config/passport');
 
 const {
@@ -30,7 +32,7 @@ const myShopRouter = require('./routes/shop');
 const authRouter = require('./routes/auth');
 
 const app = express();
-
+app.use(helmet());
 // SESSION and PASSPORT
 app.use(
   session({
@@ -58,6 +60,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression()); // compress all routes
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

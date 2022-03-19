@@ -14,3 +14,6 @@ Need time to load for the first time.
 - [Express Validator](https://express-validator.github.io/docs/)
 - [EJS](https://ejs.co/#install)
 - [Bootstrap 5](https://getbootstrap.com/)
+- [multer](https://github.com/expressjs/multer#readme)
+- [PassportJS](https://www.passportjs.org/)
+- [bcryptjs](https://github.com/dcodeIO/bcrypt.js#readme)
