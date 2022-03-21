@@ -30,10 +30,10 @@ router.get('/product/:id/update', isAuth, productController.productUpdateGet);
 router.post('/product/:id/update', isAuth, productController.productUpdatePost);
 
 // GET detail of one book
-router.get('/product/:id', isAuth, productController.productDetail);
+router.get('/product/:id', productController.productDetail);
 
 // Get list of all products
-router.get('/products', isAuth, productController.productList);
+router.get('/products', productController.productList);
 
 /// BRANDS ROUTES ///
 
