@@ -6,12 +6,12 @@ const User = require('../models/user');
 passport.use(LocalStrategy);
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, { id: user.id, username: user.username });
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    return done(null, user);
+passport.deserializeUser((user, done) => {
+  User.findById(user.id, (err, user) => {
+    return done(null, { id: user.id, username: user.username });
   });
 });
 

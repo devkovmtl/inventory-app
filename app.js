@@ -11,6 +11,11 @@ const compression = require('compression');
 const helmet = require('helmet');
 require('./config/passport');
 
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const myShopRouter = require('./routes/shop');
+const authRouter = require('./routes/auth');
+
 const {
   MONGO_USERNAME,
   MONGO_PASSWORD,
@@ -26,11 +31,6 @@ mongoose.connect(mongoDB, mongoOptions);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const myShopRouter = require('./routes/shop');
-const authRouter = require('./routes/auth');
-
 const app = express();
 app.use(helmet());
 // SESSION and PASSPORT
@@ -38,7 +38,10 @@ app.use(
   session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // Equals 1 day
+    },
   })
 );
 // initialize passport
@@ -47,7 +50,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // access to user
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });

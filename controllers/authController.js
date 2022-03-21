@@ -29,7 +29,7 @@ exports.loginGet = (req, res, next) => {
 
 exports.loginPost = passport.authenticate('local', {
   successRedirect: '/myShop',
-  failureRedirect: '/myShop',
+  failureRedirect: '/auth/login',
 });
 
 exports.logout = (req, res) => {
