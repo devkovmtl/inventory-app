@@ -16,6 +16,7 @@
 
               <div class="d-flex align-content-center justify-content-between">
                 <h2 class="text-dark fw-bold py-2"><%= brand.name %></h2>
+                <% if(user) { %>
                 <div>
                   <p>
                     <a href="<%= brand.url + '/delete'%>" class="text-danger"
@@ -28,6 +29,7 @@
                     >
                   </p>
                 </div>
+                <% } %>
               </div>
 
               <% if(brand_products.length > 0) {%>
